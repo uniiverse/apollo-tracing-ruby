@@ -7,13 +7,13 @@ require 'fixtures/schema'
 RSpec.describe Graphql::Tracing do
   it 'returns time in RFC 3339 format' do
     query = "query($user_id: ID!) { posts(user_id: $user_id) { id title user_id } }"
-    now = Time.new(2017, 8, 25)
+    now = Time.new(2017, 8, 25, 0, 0, 0, '+00:00')
     allow(Time).to receive(:now).and_return(now)
 
     result = Schema.execute(query, variables: {'user_id' => "1"})
 
-    expect(result.dig("extensions", 'tracing', 'startTime')).to eq('2017-08-25T04:00:00.000Z')
-    expect(result.dig("extensions", 'tracing', 'endTime')).to eq('2017-08-25T04:00:00.000Z')
+    expect(result.dig("extensions", 'tracing', 'startTime')).to eq('2017-08-25T00:00:00.000Z')
+    expect(result.dig("extensions", 'tracing', 'endTime')).to eq('2017-08-25T00:00:00.000Z')
   end
 
   it "resolves graphql query with tracing extension" do
