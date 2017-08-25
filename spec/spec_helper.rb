@@ -1,4 +1,6 @@
 require "bundler/setup"
+require "pry"
+
 require "graphql/tracing"
 
 RSpec.configure do |config|
