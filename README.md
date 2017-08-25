@@ -1,5 +1,7 @@
 # GraphQL Tracing
 
+[![Build Status](https://travis-ci.org/uniiverse/graphql-tracing.svg?branch=master)](https://travis-ci.org/uniiverse/graphql-tracing)
+
 Ruby implementation of [GraphQL](https://github.com/rmosolgo/graphql-ruby) trace data in the [Apollo Tracing](https://github.com/apollographql/apollo-tracing) format.
 
 ## Installation
