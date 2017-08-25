@@ -65,4 +65,23 @@ RSpec.describe Graphql::Tracing do
     expect(resolvers.dig(3, 'startOffset')).to be >= 0
     expect(resolvers.dig(3, 'duration')).to be >= 0
   end
+
+  it "resolves without race conditions and multiple threads by sharing vars in the context" do
+    thread1 = Thread.new do
+      query1 = "query($user_id: ID!) { posts(user_id: $user_id) { id slow_id } }"
+      @result1 = Schema.execute(query1, variables: {'user_id' => "1"})
+    end
+
+    thread2 = Thread.new do
+      sleep 1
+      query2 = "query($user_id: ID!) { posts(user_id: $user_id) { title } }"
+      @result2 = Schema.execute(query2, variables: {'user_id' => "1"})
+    end
+
+    [thread1, thread2].map(&:join)
+
+    expect(@result1.dig('extensions', 'tracing', 'execution', 'resolvers', 1, 'path')).to eq(['posts', 0, 'id'])
+    expect(@result1.dig('extensions', 'tracing', 'execution', 'resolvers', 2, 'path')).to eq(['posts', 0, 'slow_id'])
+    expect(@result2.dig('extensions', 'tracing', 'execution', 'resolvers', 1, 'path')).to eq(['posts', 0, 'title'])
+  end
 end

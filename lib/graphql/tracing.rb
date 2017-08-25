@@ -11,23 +11,25 @@ module GraphQL
     end
 
     def before_query(query)
-      @start_time = Time.now.utc
-      @resolvers = []
+      query.context['graphql-tracing'] = {
+        'start_time' => Time.now.utc,
+        'resolvers' => []
+      }
     end
 
     def after_query(query)
       result = query.result
       end_time = Time.now.utc
-      duration_nanos = duration_nanos(start_time: @start_time, end_time: end_time)
+      duration_nanos = duration_nanos(start_time: query.context['graphql-tracing']['start_time'], end_time: end_time)
 
       result["extensions"] ||= {}
       result["extensions"]["tracing"] = {
         "version" => 1,
-        "startTime" => @start_time.strftime('%FT%T.%3NZ'),
+        "startTime" => query.context['graphql-tracing']['start_time'].strftime('%FT%T.%3NZ'),
         "endTime" => end_time.strftime('%FT%T.%3NZ'),
         "duration" => duration_nanos,
         "execution" => {
-          "resolvers" => @resolvers
+          "resolvers" => query.context['graphql-tracing']['resolvers']
         }
       }
     end
@@ -40,12 +42,12 @@ module GraphQL
         result = old_resolve_proc.call(obj, args, ctx)
         resolve_end_time = Time.now.utc
 
-        @resolvers << {
+        ctx['graphql-tracing']['resolvers'] << {
           'path' => ctx.path,
           'parentType' => type.name,
           'fieldName' => field.name,
           'returnType' => field.type.to_s,
-          'startOffset' => duration_nanos(start_time: @start_time, end_time: resolve_start_time),
+          'startOffset' => duration_nanos(start_time: ctx['graphql-tracing']['start_time'], end_time: resolve_start_time),
           'duration' => duration_nanos(start_time: resolve_start_time, end_time: resolve_end_time)
         }
 

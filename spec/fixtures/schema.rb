@@ -6,6 +6,10 @@ PostType = GraphQL::ObjectType.define do
   field :id, !types.ID
   field :title, !types.String
   field :user_id, !types.ID
+  field :slow_id, !types.ID, resolve: ->(obj, _, _) do
+    sleep 2
+    obj.id
+  end
 end
 
 QueryType = GraphQL::ObjectType.define do
