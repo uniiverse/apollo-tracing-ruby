@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in graphql-tracing.gemspec
+# Specify your gem's dependencies in apollo-tracing.gemspec
 gemspec

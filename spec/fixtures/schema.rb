@@ -23,5 +23,5 @@ end
 
 Schema = GraphQL::Schema.define do
   query QueryType
-  use GraphQL::Tracing.new
+  use ApolloTracing.new
 end

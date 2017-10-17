@@ -8,14 +8,18 @@ one of the following labels: `Added`, `Changed`, `Deprecated`,
 to manage the versions of this gem so
 that you can set version constraints properly.
 
-#### [Unreleased](https://github.com/uniiverse/graphql-tracing/compare/v0.1.1...HEAD)
+#### [Unreleased](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.0.0...HEAD)
 
 * WIP
 
-#### [v0.1.1](https://github.com/uniiverse/graphql-tracing/compare/v0.1.0...v0.1.1) – 2017-10-17
+#### [v1.0.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/v0.1.1...v1.0.0) – 2017-10-17
+
+* `Changed`: the gem name from `graphql-tracing` to `apollo-tracing`.
+
+#### [v0.1.1](https://github.com/uniiverse/apollo-tracing-ruby/compare/v0.1.0...v0.1.1) – 2017-10-17
 
 * `Fixed`: naming conflicts with [graphql-ruby](https://github.com/rmosolgo/graphql-ruby/pull/996) by restricting the gem version.
 
-#### [v0.1.0](https://github.com/uniiverse/graphql-tracing/compare/d346dd2...v0.1.0) – 2017-08-28
+#### [v0.1.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/d346dd2...v0.1.0) – 2017-08-28
 
 * `Added`: initial functional version.

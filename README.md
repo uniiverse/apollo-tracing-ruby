@@ -1,6 +1,6 @@
-# GraphQL Tracing
+# Apollo Tracing
 
-[![Build Status](https://travis-ci.org/uniiverse/graphql-tracing.svg?branch=master)](https://travis-ci.org/uniiverse/graphql-tracing)
+[![Build Status](https://travis-ci.org/uniiverse/apollo-tracing-ruby.svg?branch=master)](https://travis-ci.org/uniiverse/apollo-tracing-ruby)
 
 Ruby implementation of [GraphQL](https://github.com/rmosolgo/graphql-ruby) trace data in the [Apollo Tracing](https://github.com/apollographql/apollo-tracing) format.
 
@@ -9,7 +9,7 @@ Ruby implementation of [GraphQL](https://github.com/rmosolgo/graphql-ruby) trace
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'graphql-tracing'
+gem 'apollo-tracing'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install graphql-tracing
+    $ gem install apollo-tracing
 
 ## Usage
 
@@ -60,12 +60,12 @@ Schema.execute(query, variables: { user_id: 1 })
 
 ### Setup Tracing
 
-Add 'GraphQL::Tracing' to your schema:
+Add 'ApolloTracing' to your schema:
 
 <pre>
 Schema = GraphQL::Schema.define do
   query QueryType
-  <b>use GraphQL::Tracing.new</b>
+  <b>use ApolloTracing.new</b>
 end
 </pre>
 
@@ -149,8 +149,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/graphql-tracing. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/uniiverse/apollo-tracing-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
