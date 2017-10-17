@@ -16,6 +16,22 @@ that you can set version constraints properly.
 
 * `Changed`: the gem name from `graphql-tracing` to `apollo-tracing`.
 
+```ruby
+# Before:
+
+Schema = GraphQL::Schema.define do
+  use GraphQL::Tracing.new
+end
+```
+
+```ruby
+# After:
+
+Schema = GraphQL::Schema.define do
+  use ApolloTracing.new
+end
+```
+
 #### [v0.1.1](https://github.com/uniiverse/apollo-tracing-ruby/compare/v0.1.0...v0.1.1) – 2017-10-17
 
 * `Fixed`: naming conflicts with [graphql-ruby](https://github.com/rmosolgo/graphql-ruby/pull/996) by restricting the gem version.
