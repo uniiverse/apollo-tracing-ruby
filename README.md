@@ -65,7 +65,7 @@ Add 'GraphQL::Tracing' to your schema:
 <pre>
 Schema = GraphQL::Schema.define do
   query QueryType
-  use GraphQL::Tracing.new
+  <b>use GraphQL::Tracing.new</b>
 end
 </pre>
 
