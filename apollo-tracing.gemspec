@@ -14,9 +14,14 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/uniiverse/apollo-tracing-ruby"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files         =
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^test/}) } +
+    %w[
+      bin/engineproxy_darwin_amd64
+      bin/engineproxy_linux_amd64
+      bin/engineproxy_windows_amd64.exe
+    ]
+
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]

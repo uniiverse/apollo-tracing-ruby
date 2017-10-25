@@ -4,6 +4,43 @@ require "graphql"
 require "apollo_tracing/version"
 
 class ApolloTracing
+  def self.start_proxy(config_filepath = 'config/apollo-engine.json')
+    config_json = File.read(config_filepath)
+    binary_path =
+      if RUBY_PLATFORM.include?('darwin')
+        File.expand_path('../../bin/engineproxy_darwin_amd64', __FILE__)
+      elsif /cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM
+        File.expand_path('../../bin/engineproxy_windows_amd64.exe', __FILE__)
+      else
+        File.expand_path('../../bin/engineproxy_linux_amd64', __FILE__)
+      end
+
+    @@proxy_pid = spawn(
+      {"ENGINE_CONFIG" => config_json},
+      "#{binary_path} -config=env -restart=true",
+      {out: STDOUT, err: STDERR}
+    )
+    at_exit { stop_proxy }
+    Process.detach(@@proxy_pid)
+    @@proxy_pid
+  end
+
+  def self.stop_proxy
+    Process.getpgid(@@proxy_pid)
+    Process.kill('TERM', @@proxy_pid)
+
+    3.times do
+      Process.getpgid(@@proxy_pid)
+      sleep 1
+    end
+
+    Process.getpgid(@@proxy_pid)
+    puts "Couldn't cleanly terminate the Apollo Engine Proxy in 3 seconds!"
+    Process.kill('KILL', @@proxy_pid)
+  rescue Errno::ESRCH
+    # process does not exist
+  end
+
   def use(schema_definition)
     schema_definition.instrument(:query, self)
     schema_definition.instrument(:field, self)

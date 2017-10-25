@@ -2,4 +2,4 @@ sudo: false
 language: ruby
 rvm:
   - 2.3.4
-script: bundle exec rspec
+script: make download_binaries && bundle exec rspec
