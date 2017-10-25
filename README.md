@@ -167,7 +167,7 @@ Here is the general architecture overview of a sidecar mode – Proxy runs next 
  -----------------    response    -----------------    response    -----------------
                                           |
                                           |
-                     GraphQL tracing data |
+                     GraphQL tracing data | from response
                                           |
                                           ˅
                                   -----------------
@@ -190,7 +190,7 @@ To configure the Proxy create a Proxy config file:
     "http": { "url": "http://localhost:3000/graphql" }
   }],
   "frontends": [{
-    "host": "127.0.0.1", "port": 3001, "endpoint": "/graphql"
+    "host": "localhost", "port": 3001, "endpoint": "/graphql"
   }]
 }
 ```
@@ -213,7 +213,7 @@ run Your::Application
 For example, if you use [rails](https://github.com/rails/rails) with [puma](https://github.com/puma/puma) application server and run it like:
 
 ```
-bundle exec puma -w 2 -t 16 -p 3001
+bundle exec puma -w 2 -t 16 -p 3000
 ```
 
 The proccess tree may look like:
