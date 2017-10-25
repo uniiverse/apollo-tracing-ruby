@@ -8,9 +8,13 @@ one of the following labels: `Added`, `Changed`, `Deprecated`,
 to manage the versions of this gem so
 that you can set version constraints properly.
 
-#### [Unreleased](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.0.0...HEAD)
+#### [Unreleased](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.1.0...HEAD)
 
 * WIP
+
+#### [v1.1.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.0.0..v1.1.0) – 2017-10-25
+
+* `Added`: Apollo Engine Proxy version [2017.10-408-g497e1410](https://www.apollographql.com/docs/engine/proxy-release-notes.html). ([#2](https://github.com/uniiverse/apollo-tracing-ruby/pull/2))
 
 #### [v1.0.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/v0.1.1...v1.0.0) – 2017-10-17
 

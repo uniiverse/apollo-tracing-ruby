@@ -1,0 +1,10 @@
+{
+  "apiKey": "service:YOUR_ENGINE_API_KEY",
+  "logging": { "level": "DEBUG" },
+  "origins": [{
+    "http": { "url": "http://localhost:3000/graphql" }
+  }],
+  "frontends": [{
+    "host": "127.0.0.1", "port": 3001, "endpoint": "/graphql"
+  }]
+}
