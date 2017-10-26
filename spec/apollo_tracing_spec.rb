@@ -11,6 +11,13 @@ RSpec.describe ApolloTracing do
       expect { Process.getpgid(pid) }.not_to raise_error
       ApolloTracing.stop_proxy
     end
+
+    it 'runs a proxy with a given JSON instead of a file path' do
+      config_json = File.read('spec/fixtures/apollo-engine-proxy.json')
+      pid = ApolloTracing.start_proxy(config_json)
+      expect { Process.getpgid(pid) }.not_to raise_error
+      ApolloTracing.stop_proxy
+    end
   end
 
   describe '.stop_proxy' do

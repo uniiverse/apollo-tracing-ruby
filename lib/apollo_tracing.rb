@@ -4,8 +4,13 @@ require "graphql"
 require "apollo_tracing/version"
 
 class ApolloTracing
-  def self.start_proxy(config_filepath = 'config/apollo-engine.json')
-    config_json = File.read(config_filepath)
+  def self.start_proxy(config_filepath_or_json = 'config/apollo-engine.json')
+    config_json =
+      if File.exist?(config_filepath_or_json)
+        File.read(config_filepath_or_json)
+      else
+        config_filepath_or_json
+      end
     binary_path =
       if RUBY_PLATFORM.include?('darwin')
         File.expand_path('../../bin/engineproxy_darwin_amd64', __FILE__)
