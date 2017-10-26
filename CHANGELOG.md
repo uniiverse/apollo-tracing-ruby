@@ -8,9 +8,13 @@ one of the following labels: `Added`, `Changed`, `Deprecated`,
 to manage the versions of this gem so
 that you can set version constraints properly.
 
-#### [Unreleased](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.1.0...HEAD)
+#### [Unreleased](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.2.0...HEAD)
 
 * WIP
+
+#### [v1.2.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.1.0...v1.2.0) – 2017-10-26
+
+* `Added`: `ApolloTracing.start_proxy` accepts a JSON string. [#3](https://github.com/uniiverse/apollo-tracing-ruby/pull/3)
 
 #### [v1.1.0](https://github.com/uniiverse/apollo-tracing-ruby/compare/v1.0.0...v1.1.0) – 2017-10-25
 

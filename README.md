@@ -167,7 +167,7 @@ Here is the general architecture overview of a sidecar mode – Proxy runs next 
  -----------------    response    -----------------    response    -----------------
                                           |
                                           |
-                     GraphQL tracing data | from response
+                          GraphQL tracing | from response
                                           |
                                           ˅
                                   -----------------
@@ -203,7 +203,7 @@ To configure the Proxy create a Proxy config file:
 To run the Proxy as a child process, which will be automatically terminated if the Application proccess stoped, add the following line to the `config.ru` file:
 
 <pre>
-# config.ru – this file is used by Rack-based servers to start the application.
+# config.ru – this file is used by Rack-based servers to start the application
 require File.expand_path('../config/environment',  __FILE__)
 
 <b>ApolloTracing.start_proxy('config/apollo-engine-proxy.json')</b>
