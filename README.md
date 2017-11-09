@@ -208,6 +208,9 @@ To run the Proxy as a child process, which will be automatically terminated if t
 require File.expand_path('../config/environment',  __FILE__)
 
 <b>ApolloTracing.start_proxy('config/apollo-engine-proxy.json')</b>
+# or pass a JSON string:
+# ApolloTracing.start_proxy('{"apiKey": "KEY", ...}')
+
 run Your::Application
 </pre>
 
