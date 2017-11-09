@@ -1,6 +1,7 @@
 # Apollo Tracing
 
 [![Build Status](https://travis-ci.org/uniiverse/apollo-tracing-ruby.svg?branch=master)](https://travis-ci.org/uniiverse/apollo-tracing-ruby)
+[![Latest Version](https://img.shields.io/gem/v/apollo-tracing.svg)](https://rubygems.org/gems/apollo-tracing)
 
 Ruby implementation of [GraphQL](https://github.com/rmosolgo/graphql-ruby) trace data in the [Apollo Tracing](https://github.com/apollographql/apollo-tracing) format.
 
