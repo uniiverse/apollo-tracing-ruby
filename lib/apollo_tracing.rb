@@ -4,6 +4,8 @@ require "graphql"
 require "apollo_tracing/version"
 
 class ApolloTracing
+  CONTEXT_KEY_NAME = 'apollo-tracing'
+
   def self.start_proxy(config_filepath_or_json = 'config/apollo-engine.json')
     config_json =
       if File.exist?(config_filepath_or_json)
@@ -52,50 +54,63 @@ class ApolloTracing
   end
 
   def before_query(query)
-    query.context['apollo-tracing'] = {
+    query.context[CONTEXT_KEY_NAME] = {
       'start_time' => Time.now.utc,
-      'resolvers' => []
+      'resolvers' => {}
     }
   end
 
   def after_query(query)
     result = query.result
     end_time = Time.now.utc
-    duration_nanos = duration_nanos(start_time: query.context['apollo-tracing']['start_time'], end_time: end_time)
+    duration_nanos = duration_nanos(start_time: query.context[CONTEXT_KEY_NAME]['start_time'], end_time: end_time)
 
     result["extensions"] ||= {}
     result["extensions"]["tracing"] = {
       "version" => 1,
-      "startTime" => query.context['apollo-tracing']['start_time'].strftime('%FT%T.%3NZ'),
+      "startTime" => query.context[CONTEXT_KEY_NAME]['start_time'].strftime('%FT%T.%3NZ'),
       "endTime" => end_time.strftime('%FT%T.%3NZ'),
       "duration" => duration_nanos,
       "execution" => {
-        "resolvers" => query.context['apollo-tracing']['resolvers']
+        "resolvers" => query.context[CONTEXT_KEY_NAME]['resolvers'].values
       }
     }
   end
 
   def instrument(type, field)
     old_resolve_proc = field.resolve_proc
-
     new_resolve_proc = ->(obj, args, ctx) do
       resolve_start_time = Time.now.utc
       result = old_resolve_proc.call(obj, args, ctx)
       resolve_end_time = Time.now.utc
 
-      ctx['apollo-tracing']['resolvers'] << {
+      ctx[CONTEXT_KEY_NAME]['resolvers'][ctx.path] = {
         'path' => ctx.path,
         'parentType' => type.name,
         'fieldName' => field.name,
         'returnType' => field.type.to_s,
-        'startOffset' => duration_nanos(start_time: ctx['apollo-tracing']['start_time'], end_time: resolve_start_time),
+        'startOffset' => duration_nanos(start_time: ctx[CONTEXT_KEY_NAME]['start_time'], end_time: resolve_start_time),
         'duration' => duration_nanos(start_time: resolve_start_time, end_time: resolve_end_time)
       }
 
       result
     end
 
-    field.redefine { resolve(new_resolve_proc) }
+    old_lazy_resolve_proc = field.lazy_resolve_proc
+    new_lazy_resolve_proc = ->(obj, args, ctx) do
+      resolve_start_time = Time.now.utc
+      result = old_lazy_resolve_proc.call(obj, args, ctx)
+      resolve_end_time = Time.now.utc
+
+      ctx[CONTEXT_KEY_NAME]['resolvers'][ctx.path]['duration'] += duration_nanos(start_time: resolve_start_time, end_time: resolve_end_time)
+
+      result
+    end
+
+    field.redefine do
+      resolve new_resolve_proc
+      lazy_resolve new_lazy_resolve_proc
+    end
   end
 
   private

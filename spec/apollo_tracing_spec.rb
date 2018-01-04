@@ -1,7 +1,5 @@
 require "spec_helper"
 
-require 'fixtures/user'
-require 'fixtures/post'
 require 'fixtures/schema'
 
 RSpec.describe ApolloTracing do
@@ -107,6 +105,23 @@ RSpec.describe ApolloTracing do
       expect(@result1.dig('extensions', 'tracing', 'execution', 'resolvers', 1, 'path')).to eq(['posts', 0, 'id'])
       expect(@result1.dig('extensions', 'tracing', 'execution', 'resolvers', 2, 'path')).to eq(['posts', 0, 'slow_id'])
       expect(@result2.dig('extensions', 'tracing', 'execution', 'resolvers', 1, 'path')).to eq(['posts', 0, 'title'])
+    end
+
+    it 'returns tracing data for lazy_resolve by counting the batch time' do
+      query = "query { users { lazy_name } }"
+
+      result = Schema.execute(query)
+
+      user1_tracing = result.dig("extensions", 'tracing', 'execution', 'resolvers', 1)
+      user2_tracing = result.dig("extensions", 'tracing', 'execution', 'resolvers', 2)
+
+      expect(user1_tracing.fetch('path')).to eq(['users', 0, 'lazy_name'])
+      expect(user1_tracing.fetch('startOffset')).to be > 0
+      expect(user1_tracing.fetch('duration')).to be > 500_000_000 # 0.5 sec
+
+      expect(user2_tracing.fetch('path')).to eq(['users', 1, 'lazy_name'])
+      expect(user2_tracing.fetch('startOffset')).to be > user1_tracing.fetch('startOffset')
+      expect(user1_tracing.fetch('duration')).to be > 500_000_000 # 0.5 sec
     end
   end
 end
