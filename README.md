@@ -77,6 +77,8 @@ Schema.execute(query, variables: { user_id: 1 })
 Add 'ApolloTracing' to your schema:
 
 <pre>
+<b>require "apollo/tracing"</b>
+
 Schema = GraphQL::Schema.define do
   query QueryType
   <b>use ApolloTracing.new</b>
