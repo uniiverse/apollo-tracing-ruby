@@ -60,6 +60,7 @@ class ApolloTracing
 
   def after_query(query)
     result = query.result
+    return unless result
     end_time = Time.now.utc
     duration_nanos = duration_nanos(start_time: query.context['apollo-tracing']['start_time'], end_time: end_time)
 
