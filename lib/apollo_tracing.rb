@@ -22,7 +22,7 @@ class ApolloTracing
 
     @@proxy_pid = spawn(
       {"ENGINE_CONFIG" => config_json},
-      "#{binary_path} -config=env -restart=true",
+      "#{binary_path} -config=env",
       {out: STDOUT, err: STDERR}
     )
     at_exit { stop_proxy }
