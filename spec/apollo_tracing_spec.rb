@@ -3,6 +3,7 @@ require "spec_helper"
 require 'fixtures/user'
 require 'fixtures/post'
 require 'fixtures/schema'
+require 'fixtures/broken_schema'
 
 RSpec.describe ApolloTracing do
   describe '.start_proxy' do
@@ -29,6 +30,14 @@ RSpec.describe ApolloTracing do
   end
 
   context 'introspection' do
+    it 'supports a nil result for failures' do
+      query = 'query($user_id: ID!) { posts(user_id: $user_id) { id title user_id } }'
+
+      expect {
+        BrokenSchema.execute(query, variables: { 'user_id' => '1' })
+      }.to raise_error(NoMethodError, /undefined method `title' for/)
+    end
+
     it 'returns time in RFC 3339 format' do
       query = "query($user_id: ID!) { posts(user_id: $user_id) { id title user_id } }"
       now = Time.new(2017, 8, 25, 0, 0, 0, '+00:00')
