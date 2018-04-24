@@ -193,7 +193,7 @@ To configure the Proxy create a Proxy config file:
     "http": { "url": "http://localhost:3000/graphql" }
   }],
   "frontends": [{
-    "host": "localhost", "port": 3001, "endpoint": "/graphql"
+    "host": "localhost", "port": 3001, "endpoints": ["/graphql"]
   }]
 }
 ```
