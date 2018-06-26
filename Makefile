@@ -1,4 +1,4 @@
-PROXY_VERSION := 2018.06-20-gc0e4bb519
+PROXY_VERSION := 2018.6-20-gc0e4bb519
 
 download_binaries:
 	curl -O https://registry.npmjs.org/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.$(PROXY_VERSION).tgz
