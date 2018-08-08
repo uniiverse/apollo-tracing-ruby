@@ -54,6 +54,7 @@ class ApolloTracing
   def before_query(query)
     query.context['apollo-tracing'] = {
       'start_time' => Time.now.utc,
+      'start_time_nanos' => Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond),
       'resolvers' => []
     }
   end
@@ -62,7 +63,8 @@ class ApolloTracing
     result = query.result
     return if result.nil? || result.to_h.nil?
     end_time = Time.now.utc
-    duration_nanos = duration_nanos(start_time: query.context['apollo-tracing']['start_time'], end_time: end_time)
+    end_time_nanos = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+    duration_nanos = end_time_nanos - query.context['apollo-tracing']['start_time_nanos']
 
     result["extensions"] ||= {}
     result["extensions"]["tracing"] = {
@@ -80,28 +82,22 @@ class ApolloTracing
     old_resolve_proc = field.resolve_proc
 
     new_resolve_proc = ->(obj, args, ctx) do
-      resolve_start_time = Time.now.utc
+      resolve_start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
       result = old_resolve_proc.call(obj, args, ctx)
-      resolve_end_time = Time.now.utc
+      resolve_end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
 
       ctx['apollo-tracing']['resolvers'] << {
         'path' => ctx.path,
         'parentType' => type.name,
         'fieldName' => field.name,
         'returnType' => field.type.to_s,
-        'startOffset' => duration_nanos(start_time: ctx['apollo-tracing']['start_time'], end_time: resolve_start_time),
-        'duration' => duration_nanos(start_time: resolve_start_time, end_time: resolve_end_time)
+        'startOffset' => resolve_start_time - ctx['apollo-tracing']['start_time_nanos'],
+        'duration' => resolve_end_time - resolve_start_time
       }
 
       result
     end
 
     field.redefine { resolve(new_resolve_proc) }
-  end
-
-  private
-
-  def duration_nanos(start_time:, end_time:)
-    ((end_time.to_f - start_time.to_f) * 1e9).to_i
   end
 end
