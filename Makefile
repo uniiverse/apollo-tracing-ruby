@@ -2,8 +2,8 @@ PROXY_VERSION := 2018.4-20-g7a8822c14
 
 download_binaries:
 	curl -O https://registry.npmjs.org/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.$(PROXY_VERSION).tgz
-	curl -O https://registry.npmjs.org/apollo-engine-binary-darwin/-/apollo-engine-binary-linux-0.$(PROXY_VERSION).tgz
-	curl -O https://registry.npmjs.org/apollo-engine-binary-darwin/-/apollo-engine-binary-windows-0.$(PROXY_VERSION).tgz
+	curl -O https://registry.npmjs.org/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.$(PROXY_VERSION).tgz
+	curl -O https://registry.npmjs.org/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.$(PROXY_VERSION).tgz
 	tar -xzf apollo-engine-binary-darwin-0.$(PROXY_VERSION).tgz
 	tar -xzf apollo-engine-binary-linux-0.$(PROXY_VERSION).tgz
 	tar -xzf apollo-engine-binary-windows-0.$(PROXY_VERSION).tgz
